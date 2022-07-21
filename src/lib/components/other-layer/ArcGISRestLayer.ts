@@ -1,31 +1,74 @@
 /*
- * @Description: 
+ * @Description: ArcGIS图层
  * @Autor: ljw
  * @Date: 2022-07-19 11:12:45
  * @LastEditors: ljw
- * @LastEditTime: 2022-07-19 17:56:31
+ * @LastEditTime: 2022-07-21 10:40:12
  */
 import BaseLayer, { BaseLayerOptions } from "../BaseLayer";
 import TileLayer from 'ol/layer/Tile'
 import TileArcGISRest from 'ol/source/TileArcGISRest'
+import { commomProps } from "../../defaultProps";
+import { definedProperties } from '../../../utils/PropertyDescriptor'
+
+const defaultProps = {
+  ...commomProps
+}
 
 class ArcGISRestLayer extends BaseLayer {
-  layer: any;
+  _layer: any;
+  _source: any;
   constructor (options: BaseLayerOptions) {
-    const { data } = options
     super(options)
-    this.init(data as string)
+    this.init(options)
   }
-  
-  init (data:string) {
-    this.layer = new TileLayer({
-      source: new TileArcGISRest({
-        url: data
-      })
+  // 初始化图层
+  init (options:BaseLayerOptions) {
+    const { data, show, minZoom, maxZoom, opacity } = options
+    // 保存source
+    this._source = new TileArcGISRest({
+      url: data as string
     })
+    // 图层
+    this._layer = new TileLayer({
+      source: this._source,
+      visible: show,
+      minZoom,
+      maxZoom,
+      opacity,
+    })
+    // 设置各个属性值
+    definedProperties(this, defaultProps, options, (name:string, value:any, classInstance:any) => {
+      switch (name) {
+        case 'show':
+          typeof value === 'boolean' && this._layer.setVisible(value)
+          break;
+        case 'opacity':
+          typeof value === 'number' && this._layer.setOpacity(value)
+          break;
+        case 'minZoom':
+          typeof value === 'number' && this._layer.setMinZoom(value)
+          break;
+        case 'maxZoom':
+          typeof value === 'number' && this._layer.setMaxZoom(value)
+          break;
+        case 'data':
+          value && this._source.setUrl(value)
+          break;
+      
+        default:
+          break;
+      }
+    })
+
   }
+  // 设置ArcGIS数据
+  setData (data: string) {
+    data && this._source.setUrl(data)
+  }
+  // 获取图层
   getLayer () {
-    return this.layer
+    return this._layer
   }
 }
 export default ArcGISRestLayer
