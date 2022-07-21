@@ -3,7 +3,7 @@
  * @Autor: ljw
  * @Date: 2022-07-19 10:48:55
  * @LastEditors: ljw
- * @LastEditTime: 2022-07-21 16:13:19
+ * @LastEditTime: 2022-07-21 17:56:29
  */
 import React, { useEffect, useState, useRef } from 'react';
 import XT from './lib';
@@ -27,7 +27,7 @@ function App() {
     map = new XT.Map('app',{
       center: [120, 30],
       zoom: 5,
-      layers: [osm]
+      // layers: [osm]
     })
     // setMap(newMap)
     // console.log(newMap);

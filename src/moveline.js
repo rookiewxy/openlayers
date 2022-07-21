@@ -1,13 +1,10 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    //   typeof define === 'function' && define.amd ? define(factory) :
+      // eslint-disable-next-line no-undef
+      typeof define === 'function' && define.amd ? define(factory) :
           (global.MoveLine = factory());
 }(this, (function () { 
 
-  /**
-   * @author https://github.com/chengquan223
-   * @Date 2017-02-27
-   * */
   function CanvasLayer(options) {
       this.options = options || {};
       this.paneName = this.options.paneName || 'labelPane';
